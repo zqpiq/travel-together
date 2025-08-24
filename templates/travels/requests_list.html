@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container my-4">
+  <h2>My Requests</h2>
+  <ul class="list-group mb-4">
+    {% for req in sent_requests %}
+      <li class="list-group-item">
+        Trip: {{ req.trip }} | Status: {{ req.get_status_display }}
+      </li>
+    {% empty %}
+      <li class="list-group-item">No requests sent yet.</li>
+    {% endfor %}
+  </ul>
+
+  <h2>Requests to My Trips</h2>
+  <ul class="list-group">
+    {% for req in received_requests %}
+      <li class="list-group-item">
+        From: {{ req.user.username }} | Trip: {{ req.trip }}
+        | Status: {{ req.get_status_display }}
+        {% if req.status == "pending" %}
+          <a href="#" class="btn btn-sm btn-success">Approve</a>
+          <a href="#" class="btn btn-sm btn-danger">Reject</a>
+        {% endif %}
+      </li>
+    {% empty %}
+      <li class="list-group-item">No requests to your trips yet.</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}

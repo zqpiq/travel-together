@@ -1,0 +1,41 @@
+.navbar {
+--bs-navbar-brand-font-size: 1.15rem;
+}
+
+.nav-link {
+font-weight: 500;
+padding: 0.75rem 1rem;
+text-align: center;
+}
+
+.nav-link:hover,
+.nav-link.active {
+background-color: rgba(255, 255, 255, 0.15);
+border-radius: 0.25rem;
+}
+
+.navbar-nav {
+flex: 1;
+display: flex;
+justify-content: space-around;
+}
+
+body {
+    background-color: #f0f4ff;
+    min-height: 100vh;
+}
+
+main {
+    padding-top: 1rem;
+}
+
+.flag-img {
+    width: 210px;
+    height: 130px;
+    border-radius: 15px;
+}
+
+.card-img-top {
+  height: 250px;
+  object-fit: cover;
+}

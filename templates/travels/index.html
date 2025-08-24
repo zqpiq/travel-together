@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+  <div class="p-5 mb-4 bg-light rounded-3 shadow-sm">
+    <div class="container-fluid py-5 text-center">
+      <h1 class="display-4 fw-bold">Welcome to <span class="text-primary">Travel Together</span></h1>
+      <p class="col-lg-8 mx-auto fs-5 text-muted">
+        Discover the world, meet amazing people, and enjoy new adventures —
+        all while keeping your travels budget-friendly.
+        Be kind and respectful to one another, and let us make your journey unforgettable! 🌍✨
+      </p>
+      <a class="btn btn-primary btn-lg px-4" href="{% url 'travels:countries' %}">Start Exploring</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

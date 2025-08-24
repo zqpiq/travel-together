@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="container my-4">
+  <div class="row">
+    {% for trip in trip_list %}
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm">
+          <img class="card-img-top"
+               src="{% static 'locations/' %}{{ trip.location.location_name_img }}"
+               alt="{{ trip.location.name }}">
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title">{{ trip }}</h5>
+            <p class="card-text"><strong>Date:</strong> {{ trip.date }}</p>
+            <p class="card-text"><strong>Budget:</strong> {{ trip.budget }}</p>
+            <p class="card-text"><strong>Duration:</strong> {{ trip.duration_trip }} days</p>
+            <p class="card-text">{{ trip.description }}</p>
+            {% if trip.owner.id != user.id %}
+              <div class="mt-auto">
+                <a href="{% url 'travels:join-trip' pk=trip.id %}" class="btn btn-primary w-100">Join the trip</a>
+              </div>
+            {% endif %}
+          </div>
+          <div class="card-footer text-muted text-center">
+            <a href="{% url 'public-profile' pk=trip.owner.profile.id %}">{{ trip.owner.username }}</a>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
