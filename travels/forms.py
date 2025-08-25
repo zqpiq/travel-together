@@ -12,4 +12,4 @@ class FormTripCreateList(forms.ModelForm):
     )
     class Meta:
         model = Trip
-        fields = ["location", "date", "budget", "description", "duration_trip", "number_of_seats", "reserved_seats"]
+        fields = ["location", "date", "budget", "description", "duration_trip", "number_of_seats"]

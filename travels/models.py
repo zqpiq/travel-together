@@ -27,7 +27,6 @@ class Trip(models.Model):
     description = models.TextField(null=True, blank=True)
     duration_trip = models.CharField(max_length=9, choices=DURATION_CHOICES)
     number_of_seats = models.IntegerField()
-    reserved_seats = models.IntegerField(default=1)
 
     def __str__(self):
         return f"Trip to: {self.location}"

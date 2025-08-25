@@ -27,7 +27,22 @@
           <div class="list-group-item">No requests sent yet.</div>
         {% endfor %}
       </div>
-
+      {% if messages %}
+        <div class="container mt-4">
+          {% for message in messages %}
+            <div class="alert
+                {% if "success" in message.tags %}alert-success
+                {% elif "warning" in message.tags %}alert-warning
+                {% else %}alert-danger{% endif %}
+                d-flex align-items-center justify-content-between shadow-sm rounded-3 p-3 mb-3 fade show" role="alert">
+              <div class="flex-grow-1">
+                {{ message }}
+              </div>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
       <h2 class="mb-4">Requests to My Trips</h2>
       <div class="list-group">
         {% for req in received_requests %}
