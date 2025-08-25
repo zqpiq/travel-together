@@ -31,6 +31,9 @@ class Trip(models.Model):
     def __str__(self):
         return f"Trip to: {self.location}"
 
+    def approved_count(self):
+        return self.requests.filter(status="approved").count()
+
 
 class TripRequest(models.Model):
     STATUS_CHOICES = (
