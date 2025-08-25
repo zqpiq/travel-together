@@ -1,49 +1,74 @@
 {% extends "base.html" %}
+{% load static %}
 {% block content %}
-<div class="container my-4">
-  <h2>My Requests</h2>
-  <ul class="list-group mb-4">
-    {% for req in sent_requests %}
-      <li class="list-group-item">
-        Trip: {{ req.trip }} | Status: {{ req.get_status_display }}
-      </li>
-    {% empty %}
-      <li class="list-group-item">No requests sent yet.</li>
-    {% endfor %}
-  </ul>
-
-  <h2>Requests to My Trips</h2>
-  <ul class="list-group">
-    {% for req in received_requests %}
-      <li class="list-group-item">
-        From: {{ req.user.username }} | Trip: {{ req.trip }}
-        | Status: {{ req.get_status_display }}
-
-        {% if req.status == "pending" %}
-          <form method="post" action="{% url 'travels:request-action' req.id 'approve' %}" style="display:inline;">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-sm btn-success">Approve</button>
-          </form>
-
-          <form method="post" action="{% url 'travels:request-action' req.id 'reject' %}" style="display:inline;">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-sm btn-danger">Reject</button>
-          </form>
-        {% endif %}
-      </li>
-    {% empty %}
-      <li class="list-group-item">No requests to your trips yet.</li>
-    {% endfor %}
-  </ul>
-</div>
-
-{% if messages %}
-  <div class="mt-3">
-    {% for message in messages %}
-      <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
-        {{ message }}
+<div class="container my-5">
+  <div class="row">
+    <div class="col-md-12">
+      <h2 class="mb-4">My Requests</h2>
+      <div class="list-group mb-5">
+        {% for req in sent_requests %}
+          <div class="list-group-item d-flex justify-content-between align-items-center shadow-sm mb-2">
+            <div>
+              <strong>Trip:</strong> {{ req.trip }}<br>
+              <strong>Status:</strong> {{ req.get_status_display }}
+              {% if req.status == "approved" %}
+                <div class="mt-1 text-primary">
+                  Your request has been approved. Expect a message by email, Telegram, or a call soon.
+                </div>
+              {% elif req.status == "rejected" %}
+                <div class="mt-1 text-danger">
+                  Your request was rejected.
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        {% empty %}
+          <div class="list-group-item">No requests sent yet.</div>
+        {% endfor %}
       </div>
-    {% endfor %}
+
+      <h2 class="mb-4">Requests to My Trips</h2>
+      <div class="list-group">
+        {% for req in received_requests %}
+          <div class="list-group-item d-flex justify-content-between align-items-center shadow-sm mb-2">
+            <div>
+              <strong>From:</strong> {{ req.user.username }}<br>
+              <strong>Trip:</strong> {{ req.trip }}<br>
+              <strong>Status:</strong> {{ req.get_status_display }}
+
+              {% if req.status == "approved" %}
+                <div class="mt-1 text-success">
+                  You approved this request. Please contact the participant as soon as possible to discuss details.
+                </div>
+              {% elif req.status == "rejected" %}
+                <div class="mt-1 text-danger">
+                  You rejected this request.
+                </div>
+              {% endif %}
+            </div>
+            <div>
+              {% if req.status == "pending" %}
+                <form method="post" action="{% url 'travels:request-action' req.id 'approve' %}" style="display:inline;">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-sm btn-success me-1">Approve</button>
+                </form>
+
+                <form method="post" action="{% url 'travels:request-action' req.id 'reject' %}" style="display:inline;">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-sm btn-danger">Reject</button>
+                </form>
+              {% elif req.status == "approved" %}
+                <a href="{% url 'full-profile' pk=req.user.profile.id %}" class="btn btn-sm btn-primary">
+                  View Profile & Contacts
+                </a>
+              {% endif %}
+            </div>
+          </div>
+        {% empty %}
+          <div class="list-group-item">No requests to your trips yet.</div>
+        {% endfor %}
+      </div>
+    </div>
   </div>
-{% endif %}
+</div>
 {% endblock %}

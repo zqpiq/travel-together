@@ -5,6 +5,7 @@ from django.urls import reverse_lazy
 from django.views import generic, View
 from django.contrib import messages
 
+from account.models import Profile
 from travels.forms import FormTripCreateList
 from travels.models import Country, Location, Trip, TripRequest
 

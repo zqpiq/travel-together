@@ -57,3 +57,9 @@ class ProfileDetailView(generic.DetailView):
 class PublicProfileDetailView(generic.DetailView):
     model = Profile
     template_name = "registration/public_profile_detail.html"
+
+
+class FullProfileDetailView(generic.DetailView):
+    model = Profile
+    template_name = "registration/full_profile_detail.html"
+    context_object_name = "profile"
