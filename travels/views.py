@@ -105,15 +105,22 @@ class TripRequestListView(LoginRequiredMixin, generic.ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        sent_requests = TripRequest.objects.filter(user=self.request.user)
+        sent_requests = (
+            TripRequest.objects
+            .filter(user=self.request.user)
+            .select_related("trip")
+            .prefetch_related("trip__comments")
+        )
         for req in sent_requests:
             req.can_comment = req.trip.can_comment(self.request.user)
+
         context["sent_requests"] = sent_requests
-        context["received_requests"] = TripRequest.objects.filter(
-            trip__owner=self.request.user
+        context["received_requests"] = (
+            TripRequest.objects
+            .filter(trip__owner=self.request.user)
+            .select_related("trip", "user")
         )
         return context
-
 
 class TripRequestActionView(LoginRequiredMixin, View):
     def post(self, request, pk, action):
