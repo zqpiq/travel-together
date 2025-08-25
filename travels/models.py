@@ -41,6 +41,9 @@ class Trip(models.Model):
     def is_finished(self):
         return self.date < (timezone.localdate() + timedelta(days=1))
 
+    def can_comment(self, user):
+        return not self.comments.filter(author_trip=user).exists()
+
 
 class TripRequest(models.Model):
     STATUS_CHOICES = (
@@ -116,17 +119,3 @@ class Commentary(models.Model):
     )
     text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-
-
-class Rating(models.Model):
-    RATING_CHOICE = (
-        (1, 1),
-        (2, 2),
-        (3, 3),
-        (4, 4),
-        (5, 5)
-    )
-    recipient = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    rating = models.PositiveSmallIntegerField(
-        choices=RATING_CHOICE
-    )

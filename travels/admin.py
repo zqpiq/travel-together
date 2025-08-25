@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from travels.models import Trip, Location, Country, Commentary, Rating, TripRequest
+from travels.models import Trip, Location, Country, Commentary, TripRequest
 
 
 @admin.register(Trip)
@@ -26,10 +26,6 @@ class CountryAdmin(admin.ModelAdmin):
 class CommentaryAdmin(admin.ModelAdmin):
     list_display = ["trip", "author_trip", "recipient", "created_at"]
 
-
-@admin.register(Rating)
-class RatingAdmin(admin.ModelAdmin):
-    list_display = ["recipient", "rating"]
 
 @admin.register(TripRequest)
 class TripRequestAdmin(admin.ModelAdmin):

@@ -5,7 +5,6 @@ from django.urls import reverse_lazy
 from django.views import generic, View
 from django.contrib import messages
 
-from account.models import Profile
 from travels.forms import FormTripCreate, FormCommentaryCreate
 from travels.models import Country, Location, Trip, TripRequest
 
@@ -100,11 +99,12 @@ class TripRequestListView(LoginRequiredMixin, generic.ListView):
     template_name = "travels/requests_list.html"
     context_object_name = "sent_requests"
 
-    def get_queryset(self):
-        return TripRequest.objects.filter(user=self.request.user)
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        sent_requests = TripRequest.objects.filter(user=self.request.user)
+        for req in sent_requests:
+            req.can_comment = req.trip.can_comment(self.request.user)
+        context["sent_requests"] = sent_requests
         context["received_requests"] = TripRequest.objects.filter(trip__owner=self.request.user)
         return context
 
@@ -138,8 +138,7 @@ class TripRequestActionView(LoginRequiredMixin, View):
 
 class CommentaryCreateView(LoginRequiredMixin, generic.CreateView):
     form_class = FormCommentaryCreate
-    success_url = reverse_lazy("travels:my-trips")
-    template_name = "travels/commentary_create.html"
+    success_url = reverse_lazy("travels:requests")
 
     def form_valid(self, form):
         trip_id = self.kwargs.get("pk")
@@ -148,5 +147,3 @@ class CommentaryCreateView(LoginRequiredMixin, generic.CreateView):
         form.instance.author_trip = self.request.user
         form.instance.recipient = trip.owner
         return super().form_valid(form)
-
-

@@ -4,7 +4,7 @@ from travels.views import (index,
                            CountryListView,
                            LocationListView,
                            TripListView, TripCreateView, MyTripsListView, TripRequestCreateView, TripRequestListView,
-                           TripRequestActionView, CommentaryCreateView,
+                           TripRequestActionView, CommentaryCreateView
                            )
 
 app_name ="travels"
@@ -26,5 +26,4 @@ urlpatterns = [
         name="request-action"
     ),
     path("trip/<int:pk>/add-comment/", CommentaryCreateView.as_view(), name="add-comment"),
-
 ]

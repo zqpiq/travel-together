@@ -22,7 +22,7 @@
                   Your request was rejected.
                 </div>
               {% endif %}
-            {% if req.trip.is_finished %}
+              {% if req.trip.is_finished and req.can_comment %}
               <div class="card mt-3 shadow-sm">
                 <div class="card-body">
                   <h6 class="card-title mb-3">Leave a Comment for {{ req.trip.owner.username }}</h6>
@@ -35,7 +35,7 @@
                   </form>
                 </div>
               </div>
-            {% endif %}
+              {% endif %}
             </div>
           </div>
         {% empty %}
