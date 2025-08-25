@@ -1,8 +1,9 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpRequest, HttpResponse, JsonResponse
-from django.shortcuts import render, get_object_or_404
+from django.http import HttpRequest, HttpResponse
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views import generic, View
+from django.contrib import messages
 
 from travels.forms import FormTripCreateList
 from travels.models import Country, Location, Trip, TripRequest
@@ -78,21 +79,29 @@ class TripRequestListView(LoginRequiredMixin, generic.ListView):
         context["received_requests"] = TripRequest.objects.filter(trip__owner=self.request.user)
         return context
 
-class TripRequestApproveView(LoginRequiredMixin, View):
-    def post(self, request, pk):
-        trip_request = TripRequest.objects.get(pk=pk)
-        if trip_request != request.user:
-            return JsonResponse({"error": "Not allowed"}, status=403)
-        try:
-            trip_request.approve()
-        except ValueError as error:
-            return JsonResponse({"error": str(error)}, status=400)
-        return JsonResponse({"status": trip_request.status})
 
-class TripRequestRejectView(LoginRequiredMixin, View):
-    def post(self, request, pk):
-        trip_request = TripRequest.objects.get(pk=pk)
+class TripRequestActionView(LoginRequiredMixin, View):
+    def post(self, request, pk, action):
+        trip_request = get_object_or_404(TripRequest, pk=pk)
+
         if trip_request.trip.owner != request.user:
-            return JsonResponse({"error": "Not allowed"}, status=403)
-        trip_request.reject()
-        return JsonResponse({"status": trip_request.status})
+            messages.error(request, "You cannot manage this request.")
+            return redirect("travels:requests")
+
+        if trip_request.status != "pending":
+            messages.warning(request, "This request is already processed.")
+            return redirect("travels:requests")
+
+        try:
+            if action == "approve":
+                trip_request.approve()
+                messages.success(request, f"Request approved ✅")
+            elif action == "reject":
+                trip_request.reject()
+                messages.warning(request, f"Request rejected ❌")
+            else:
+                messages.error(request, "Unknown action.")
+        except ValueError as e:
+            messages.error(request, str(e))
+
+        return redirect("travels:requests")
