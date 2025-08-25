@@ -45,6 +45,12 @@ class ProfileEditForm(forms.ModelForm):
     phone_number = PhoneNumberField(
         widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "+380123456789"})
     )
+    date_birth = forms.DateField(
+        required=False,
+        widget=forms.DateInput(
+            attrs={'type': 'date', 'class': 'form-control'}
+        )
+    )
 
     class Meta:
         model = Profile

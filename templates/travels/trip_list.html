@@ -26,7 +26,22 @@
           </div>
         </div>
       </div>
-    {% endfor %}
+  {% empty %}
+    <div class="container mt-5">
+      <div class="p-5 mb-4 bg-light rounded-3 shadow-sm">
+        <div class="container-fluid py-5 text-center">
+          <h2 class="fw-bold text-secondary">No trips available yet 🚀</h2>
+          <p class="col-lg-8 mx-auto fs-5 text-muted">
+            Be the first to create an adventure and invite others to join you.
+            Your journey might inspire someone else’s dream trip! ✈️✨
+          </p>
+          <a class="btn btn-primary btn-lg px-4" href="{% url 'travels:create-trip' %}">
+            Create Your Trip
+          </a>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
   </div>
 </div>
 {% endblock %}
