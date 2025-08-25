@@ -45,7 +45,17 @@ class TripCreateView(LoginRequiredMixin, generic.CreateView):
     template_name = "travels/trip_form.html"
 
     def form_valid(self, form):
-        form.instance.owner = self.request.user
+        user = self.request.user
+        profile = getattr(user, "profile", None)
+
+        if not user.email or not profile.phone_number:
+            messages.error(
+                self.request,
+                "Please complete your profile (add email and phone number) before creating a trip."
+            )
+            return redirect("fill-profile")
+
+        form.instance.owner = user
         return super().form_valid(form)
 
 
@@ -61,10 +71,21 @@ class TripRequestCreateView(LoginRequiredMixin, generic.CreateView):
     template_name = "travels/join_trip_confirm.html"
     success_url = reverse_lazy("travels:home-page")
 
+
     def form_valid(self, form):
+        user = self.request.user
+        profile = getattr(user, "profile", None)
+
+        if not user.email or not profile.phone_number:
+            messages.error(
+                self.request,
+                "Please complete your profile (add email and phone number) before joining a trip."
+            )
+            return redirect("fill-profile")
+
         trip = get_object_or_404(Trip, pk=self.kwargs["pk"])
         form.instance.trip = trip
-        form.instance.user = self.request.user
+        form.instance.user = user
         return super().form_valid(form)
 
 class TripRequestListView(LoginRequiredMixin, generic.ListView):

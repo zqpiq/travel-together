@@ -10,7 +10,8 @@
           <div class="list-group-item d-flex justify-content-between align-items-center shadow-sm mb-2">
             <div>
               <strong>Trip:</strong> {{ req.trip }}<br>
-              <strong>Status:</strong> {{ req.get_status_display }}
+              <strong>Status:</strong> {{ req.get_status_display }}<br>
+              <strong>Owner:</strong> <a href="{% url 'public-profile' pk=req.trip.owner.profile.id %}">{{ req.trip.owner }}</a>
               {% if req.status == "approved" %}
                 <div class="mt-1 text-primary">
                   Your request has been approved. Expect a message by email, Telegram, or a call soon.
