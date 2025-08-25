@@ -18,31 +18,24 @@ def register(request):
             Profile.objects.create(user=new_user)
             return redirect("fill-profile")
     user_form = UserRegistrationForm()
-    return render(
-        request,
-        "registration/register.html",
-        {"user_form": user_form}
-    )
+    return render(request, "registration/register.html", {"user_form": user_form})
+
 
 def fill_profile(request: HttpRequest):
     if request.method == "POST":
         profile_form = ProfileEditForm(
-            instance=request.user.profile,
-            data=request.POST,
-            files=request.FILES
+            instance=request.user.profile, data=request.POST, files=request.FILES
         )
         if profile_form.is_valid():
             profile_form.save()
             return render(
                 request,
                 "registration/register_done.html",
-                {"profile_form": profile_form}
+                {"profile_form": profile_form},
             )
     profile_form = ProfileEditForm(instance=request.user.profile)
     return render(
-        request,
-        "registration/profile_edit.html",
-        {"profile_form": profile_form}
+        request, "registration/profile_edit.html", {"profile_form": profile_form}
     )
 
 

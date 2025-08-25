@@ -9,6 +9,7 @@ class TripAdmin(admin.ModelAdmin):
 
     def get_users(self, obj) -> str:
         return ", ".join([user.username for user in obj.user.all()])
+
     get_users.short_description = "Users"
 
 

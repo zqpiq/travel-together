@@ -14,21 +14,12 @@ class Profile(models.Model):
         ("Male", "Male"),
         ("Female", "Female"),
         ("Other", "Other"),
-        ("None", "Prefer not to say")
+        ("None", "Prefer not to say"),
     )
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     phone_number = PhoneNumberField(blank=True, null=True)
     telegram = models.CharField(max_length=35, blank=True, null=True)
-    avatar = CloudinaryField(
-        "avatar",
-        folder="profile_avatars",
-        blank=True,
-        null=True
-    )
-    gender = models.CharField(
-        max_length=7,
-        choices=GENDER_CHOICES,
-        default="N"
-    )
+    avatar = CloudinaryField("avatar", folder="profile_avatars", blank=True, null=True)
+    gender = models.CharField(max_length=7, choices=GENDER_CHOICES, default="N")
     date_birth = models.DateField(blank=True, null=True)
     about_me = models.TextField(blank=True, null=True)

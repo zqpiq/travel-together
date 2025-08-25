@@ -12,6 +12,7 @@ from travels.models import Country, Location, Trip, TripRequest
 def index(request: HttpRequest) -> HttpResponse:
     return render(request, "travels/index.html")
 
+
 class CountryListView(generic.ListView):
     model = Country
 
@@ -39,8 +40,10 @@ class TripListView(generic.ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        user_requests = TripRequest.objects.filter(user=self.request.user).values_list('trip_id', flat=True)
-        context['user_trip_requests'] = user_requests
+        user_requests = TripRequest.objects.filter(user=self.request.user).values_list(
+            "trip_id", flat=True
+        )
+        context["user_trip_requests"] = user_requests
         return context
 
 
@@ -56,7 +59,7 @@ class TripCreateView(LoginRequiredMixin, generic.CreateView):
         if not user.email or not profile.phone_number:
             messages.error(
                 self.request,
-                "Please complete your profile (add email and phone number) before creating a trip."
+                "Please complete your profile (add email and phone number) before creating a trip.",
             )
             return redirect("fill-profile")
 
@@ -71,12 +74,12 @@ class MyTripsListView(LoginRequiredMixin, generic.ListView):
     def get_queryset(self):
         return Trip.objects.filter(owner=self.request.user)
 
+
 class TripRequestCreateView(LoginRequiredMixin, generic.CreateView):
     model = TripRequest
     fields = []
     template_name = "travels/join_trip_confirm.html"
     success_url = reverse_lazy("travels:home-page")
-
 
     def form_valid(self, form):
         user = self.request.user
@@ -85,7 +88,7 @@ class TripRequestCreateView(LoginRequiredMixin, generic.CreateView):
         if not user.email or not profile.phone_number:
             messages.error(
                 self.request,
-                "Please complete your profile (add email and phone number) before joining a trip."
+                "Please complete your profile (add email and phone number) before joining a trip.",
             )
             return redirect("fill-profile")
 
@@ -93,6 +96,7 @@ class TripRequestCreateView(LoginRequiredMixin, generic.CreateView):
         form.instance.trip = trip
         form.instance.user = user
         return super().form_valid(form)
+
 
 class TripRequestListView(LoginRequiredMixin, generic.ListView):
     model = TripRequest
@@ -105,7 +109,9 @@ class TripRequestListView(LoginRequiredMixin, generic.ListView):
         for req in sent_requests:
             req.can_comment = req.trip.can_comment(self.request.user)
         context["sent_requests"] = sent_requests
-        context["received_requests"] = TripRequest.objects.filter(trip__owner=self.request.user)
+        context["received_requests"] = TripRequest.objects.filter(
+            trip__owner=self.request.user
+        )
         return context
 
 

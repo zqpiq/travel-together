@@ -21,7 +21,9 @@ class Trip(models.Model):
         ("8-14 days", "8-15 days"),
         (">14 days", ">14 days"),
     )
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="created_trips")
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="created_trips"
+    )
     location = models.ForeignKey("Location", on_delete=models.CASCADE)
     date = models.DateField()
     budget = models.CharField(
@@ -50,19 +52,22 @@ class TripRequest(models.Model):
         ("approved", "Approved"),
         ("rejected", "Rejected"),
         ("pending", "Pending"),
-
     )
     trip = models.ForeignKey(Trip, on_delete=models.CASCADE, related_name="requests")
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="trip_requests")
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="trip_requests"
+    )
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="pending")
     contacts_visible = models.BooleanField(default=False)
-
 
     class Meta:
         unique_together = ("trip", "user")
 
     def approve(self):
-        if self.trip.requests.filter(status="approved").count() < self.trip.number_of_seats:
+        if (
+            self.trip.requests.filter(status="approved").count()
+            < self.trip.number_of_seats
+        ):
             self.status = "approved"
             self.save()
         else:
@@ -78,7 +83,9 @@ class TripRequest(models.Model):
 
 class Location(models.Model):
     name = models.CharField(max_length=50)
-    country = models.ForeignKey("Country", on_delete=models.CASCADE, related_name="locations")
+    country = models.ForeignKey(
+        "Country", on_delete=models.CASCADE, related_name="locations"
+    )
     location_name_img = models.CharField(max_length=50)
 
     class Meta:
@@ -102,20 +109,16 @@ class Country(models.Model):
 
 
 class Commentary(models.Model):
-    trip = models.ForeignKey(
-        Trip,
-        on_delete=models.CASCADE,
-        related_name="comments"
-    )
+    trip = models.ForeignKey(Trip, on_delete=models.CASCADE, related_name="comments")
     author_trip = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name="written_comments"
+        related_name="written_comments",
     )
     recipient = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name="received_comments"
+        related_name="received_comments",
     )
     text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)

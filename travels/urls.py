@@ -1,13 +1,19 @@
 from django.urls import path
 
-from travels.views import (index,
-                           CountryListView,
-                           LocationListView,
-                           TripListView, TripCreateView, MyTripsListView, TripRequestCreateView, TripRequestListView,
-                           TripRequestActionView, CommentaryCreateView
-                           )
+from travels.views import (
+    index,
+    CountryListView,
+    LocationListView,
+    TripListView,
+    TripCreateView,
+    MyTripsListView,
+    TripRequestCreateView,
+    TripRequestListView,
+    TripRequestActionView,
+    CommentaryCreateView,
+)
 
-app_name ="travels"
+app_name = "travels"
 
 urlpatterns = [
     path("", index, name="home-page"),
@@ -23,7 +29,9 @@ urlpatterns = [
     path(
         "request/<int:pk>/<str:action>/",
         TripRequestActionView.as_view(),
-        name="request-action"
+        name="request-action",
     ),
-    path("trip/<int:pk>/add-comment/", CommentaryCreateView.as_view(), name="add-comment"),
+    path(
+        "trip/<int:pk>/add-comment/", CommentaryCreateView.as_view(), name="add-comment"
+    ),
 ]
