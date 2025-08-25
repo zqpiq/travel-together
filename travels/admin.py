@@ -24,7 +24,7 @@ class CountryAdmin(admin.ModelAdmin):
 
 @admin.register(Commentary)
 class CommentaryAdmin(admin.ModelAdmin):
-    list_display = ["trip", "author", "recipient", "created_at"]
+    list_display = ["trip", "author_trip", "recipient", "created_at"]
 
 
 @admin.register(Rating)

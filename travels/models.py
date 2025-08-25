@@ -1,3 +1,7 @@
+from datetime import timedelta
+
+from django.utils import timezone
+
 from django.conf import settings
 from django.db import models
 
@@ -33,6 +37,9 @@ class Trip(models.Model):
 
     def approved_count(self):
         return self.requests.filter(status="approved").count()
+
+    def is_finished(self):
+        return self.date < (timezone.localdate() + timedelta(days=1))
 
 
 class TripRequest(models.Model):
@@ -97,7 +104,7 @@ class Commentary(models.Model):
         on_delete=models.CASCADE,
         related_name="comments"
     )
-    author = models.ForeignKey(
+    author_trip = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="written_comments"

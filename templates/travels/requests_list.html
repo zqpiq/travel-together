@@ -21,6 +21,9 @@
                   Your request was rejected.
                 </div>
               {% endif %}
+            {% if req.trip.is_finished %}
+              <a href="{% url 'travels:add-comment' pk=req.trip.id%}">Add comment</a>
+            {% endif %}
             </div>
           </div>
         {% empty %}

@@ -1,9 +1,9 @@
 from django import forms
 
-from travels.models import Trip
+from travels.models import Trip, Commentary
 
 
-class FormTripCreateList(forms.ModelForm):
+class FormTripCreate(forms.ModelForm):
     date = forms.DateField(
         required=False,
         widget=forms.DateInput(
@@ -13,3 +13,9 @@ class FormTripCreateList(forms.ModelForm):
     class Meta:
         model = Trip
         fields = ["location", "date", "budget", "description", "duration_trip", "number_of_seats"]
+
+
+class FormCommentaryCreate(forms.ModelForm):
+    class Meta:
+        model = Commentary
+        fields = ["text"]

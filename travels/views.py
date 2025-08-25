@@ -6,7 +6,7 @@ from django.views import generic, View
 from django.contrib import messages
 
 from account.models import Profile
-from travels.forms import FormTripCreateList
+from travels.forms import FormTripCreate, FormCommentaryCreate
 from travels.models import Country, Location, Trip, TripRequest
 
 
@@ -46,7 +46,7 @@ class TripListView(generic.ListView):
 
 
 class TripCreateView(LoginRequiredMixin, generic.CreateView):
-    form_class = FormTripCreateList
+    form_class = FormTripCreate
     success_url = reverse_lazy("travels:my-trips")
     template_name = "travels/trip_form.html"
 
@@ -134,3 +134,38 @@ class TripRequestActionView(LoginRequiredMixin, View):
             messages.error(request, str(e))
 
         return redirect("travels:requests")
+
+
+class CommentaryCreateView(LoginRequiredMixin, generic.CreateView):
+    form_class = FormCommentaryCreate
+    success_url = reverse_lazy("travels:my-trips")
+    template_name = "travels/commentary_create.html"
+
+    def form_valid(self, form):
+        trip_id = self.kwargs.get("pk")
+        trip = get_object_or_404(Trip, pk=trip_id)
+        form.instance.trip = trip
+        form.instance.author_trip = self.request.user
+        form.instance.recipient = trip.owner
+        return super().form_valid(form)
+
+
+
+
+
+    # def form_valid(self, form):
+    #     user = self.request.user
+    #     profile = getattr(user, "profile", None)
+    #
+    #     if not user.email or not profile.phone_number:
+    #         messages.error(
+    #             self.request,
+    #             "Please complete your profile (add email and phone number) before joining a trip."
+    #         )
+    #         return redirect("fill-profile")
+    #
+    #     trip = get_object_or_404(Trip, pk=self.kwargs["pk"])
+    #     form.instance.trip = trip
+    #     form.instance.user = user
+    #     return super().form_valid(form)
+
