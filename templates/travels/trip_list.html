@@ -13,7 +13,7 @@
             <h5 class="card-title">{{ trip }}</h5>
             <p class="card-text"><strong>Date:</strong> {{ trip.date }}</p>
             <p class="card-text"><strong>Budget:</strong> {{ trip.budget }}</p>
-            <p class="card-text"><strong>Duration:</strong> {{ trip.duration_trip }} days</p>
+            <p class="card-text"><strong>Duration:</strong> {{ trip.duration_trip }}</p>
             <p class="card-text">{{ trip.description }}</p>
             {% if trip.owner.id != user.id %}
               <div class="mt-auto">

@@ -11,11 +11,11 @@ class Trip(models.Model):
         (">$5000", ">$5000"),
     )
     DURATION_CHOICES = (
-        ("1", "1"),
-        ("2-4", "2-4"),
-        ("5-7", "5-7"),
-        ("8-14", "8-15"),
-        (">14", ">14"),
+        ("1 day", "1 day"),
+        ("2-4 days", "2-4 days"),
+        ("5-7 days", "5-7 days"),
+        ("8-14 days", "8-15 days"),
+        (">14 days", ">14 days"),
     )
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="created_trips")
     location = models.ForeignKey("Location", on_delete=models.CASCADE)
@@ -25,7 +25,7 @@ class Trip(models.Model):
         choices=BUDGET_CHOICES,
     )
     description = models.TextField(null=True, blank=True)
-    duration_trip = models.CharField(max_length=5, choices=DURATION_CHOICES)
+    duration_trip = models.CharField(max_length=9, choices=DURATION_CHOICES)
     number_of_seats = models.IntegerField()
     reserved_seats = models.IntegerField(default=1)
 
