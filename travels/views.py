@@ -150,22 +150,3 @@ class CommentaryCreateView(LoginRequiredMixin, generic.CreateView):
         return super().form_valid(form)
 
 
-
-
-
-    # def form_valid(self, form):
-    #     user = self.request.user
-    #     profile = getattr(user, "profile", None)
-    #
-    #     if not user.email or not profile.phone_number:
-    #         messages.error(
-    #             self.request,
-    #             "Please complete your profile (add email and phone number) before joining a trip."
-    #         )
-    #         return redirect("fill-profile")
-    #
-    #     trip = get_object_or_404(Trip, pk=self.kwargs["pk"])
-    #     form.instance.trip = trip
-    #     form.instance.user = user
-    #     return super().form_valid(form)
-
