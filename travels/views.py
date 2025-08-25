@@ -67,6 +67,7 @@ class TripCreateView(LoginRequiredMixin, generic.CreateView):
 
 class MyTripsListView(LoginRequiredMixin, generic.ListView):
     model = Trip
+    template_name = "travels/my_trips.html"
 
     def get_queryset(self):
         return Trip.objects.filter(owner=self.request.user)
