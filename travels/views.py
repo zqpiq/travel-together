@@ -38,6 +38,12 @@ class TripListView(generic.ListView):
         except KeyError:
             return Trip.objects.all()
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_requests = TripRequest.objects.filter(user=self.request.user).values_list('trip_id', flat=True)
+        context['user_trip_requests'] = user_requests
+        return context
+
 
 class TripCreateView(LoginRequiredMixin, generic.CreateView):
     form_class = FormTripCreateList

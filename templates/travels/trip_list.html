@@ -16,9 +16,13 @@
             <p class="card-text"><strong>Duration:</strong> {{ trip.duration_trip }}</p>
             <p class="card-text">{{ trip.description }}</p>
             {% if trip.owner.id != user.id %}
-              <div class="mt-auto">
-                <a href="{% url 'travels:join-trip' pk=trip.id %}" class="btn btn-primary w-100">Join the trip</a>
-              </div>
+                <div class="mt-auto">
+                    {% if trip.id in user_trip_requests %}
+                        <button class="btn btn-secondary w-100" disabled>Request sent ✅</button>
+                    {% else %}
+                        <a href="{% url 'travels:join-trip' pk=trip.id %}" class="btn btn-primary w-100">Join the trip</a>
+                    {% endif %}
+                </div>
             {% endif %}
           </div>
           <div class="card-footer text-muted text-center">
