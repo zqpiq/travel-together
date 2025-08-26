@@ -39,7 +39,6 @@
 - **Django 5.2.5** - web framework
 - **SQLite** - database (default)
 - **Cloudinary** - image storage
-- **django-phonenumber-field** - phone number validation
 
 ### Frontend
 - **Bootstrap 5** - CSS framework
