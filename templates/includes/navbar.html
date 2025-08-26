@@ -11,10 +11,11 @@
       <ul class="navbar-nav mb-2 mb-lg-0">
         <li class="nav-item"><a class="nav-link" href="{% url 'travels:countries' %}">Countries</a></li>
         <li class="nav-item"><a class="nav-link" href="{% url 'travels:locations-all' %}">Cities</a></li>
-        <li class="nav-item"><a class="nav-link" href="{% url 'travels:trips-all' %}">Trips</a></li>
         {% if user.is_authenticated %}
+          <li class="nav-item"><a class="nav-link" href="{% url 'travels:trips-all' %}">Trips</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'travels:my-trips' %}">My trips</a></li>
           {% else %}
+          <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Trips</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">My trips</a></li>
         {% endif %}
         <li class="nav-item"><a class="nav-link" href="{% url 'travels:requests' %}">Requests</a></li>
