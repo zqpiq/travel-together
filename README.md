@@ -1,7 +1,8 @@
 # 🌍 Travel Together
 
 **Travel Together** is a web platform for organizing shared travel experiences, helping travelers find companions and share costs for their adventures.
-![Снимок экрана 2025-08-26 в 14.57.51.png](../../Desktop/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA%20%D1%8D%D0%BA%D1%80%D0%B0%D0%BD%D0%B0%202025-08-26%20%D0%B2%2014.57.51.png)
+<img width="709" height="923" alt="Снимок экрана 2025-08-26 в 14 57 51" src="https://github.com/user-attachments/assets/adc891e2-9441-4986-b754-1c3057a12290" />
+
 
 
 ## 📋 Table of Contents
