@@ -221,13 +221,6 @@ travel_together/
 - `date_birth` - birth date
 - `about_me` - user description
 
-## 🧪 Testing
-
-Run the test suite:
-```bash
-python manage.py test
-```
-
 ## 🚢 Deployment
 
 ### Production Settings
