@@ -6,7 +6,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 
 class User(AbstractUser):
-    pass
+    email = models.EmailField(unique=True)
 
 
 class Profile(models.Model):
