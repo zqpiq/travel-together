@@ -6,10 +6,17 @@
     <div class="row">
       {% for location in location_list %}
         <div class="col-4 text-center mb-4">
+        {% if user.is_authenticated %}
           <a href="{% url 'travels:trips' pk=location.id %}">
             <img class="flag-img img-fluid" src="{% static 'locations/' %}{{ location.location_name_img }}" alt="{{ location.name }}" >
             <p class="fw-bold text-primary mt-2">{{ location.name }}</p>
           </a>
+          {% else %}
+          <a href="{% url 'login' %}">
+            <img class="flag-img img-fluid" src="{% static 'locations/' %}{{ location.location_name_img }}" alt="{{ location.name }}" >
+            <p class="fw-bold text-primary mt-2">{{ location.name }}</p>
+          </a>
+        {% endif %}
         </div>
       {% endfor %}
     </div>
