@@ -47,6 +47,14 @@ class TripListView(generic.ListView):
         return context
 
 
+class MyTripsListView(LoginRequiredMixin, generic.ListView):
+    model = Trip
+    template_name = "travels/my_trips.html"
+
+    def get_queryset(self):
+        return Trip.objects.filter(owner=self.request.user)
+
+
 class TripCreateView(LoginRequiredMixin, generic.CreateView):
     form_class = FormTripCreate
     success_url = reverse_lazy("travels:my-trips")
@@ -65,14 +73,6 @@ class TripCreateView(LoginRequiredMixin, generic.CreateView):
 
         form.instance.owner = user
         return super().form_valid(form)
-
-
-class MyTripsListView(LoginRequiredMixin, generic.ListView):
-    model = Trip
-    template_name = "travels/my_trips.html"
-
-    def get_queryset(self):
-        return Trip.objects.filter(owner=self.request.user)
 
 
 class TripRequestCreateView(LoginRequiredMixin, generic.CreateView):
