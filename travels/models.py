@@ -1,5 +1,6 @@
 from datetime import timedelta
 
+from django.core.exceptions import ValidationError
 from django.utils import timezone
 
 from django.conf import settings
@@ -44,7 +45,7 @@ class Trip(models.Model):
         return self.date < (timezone.localdate() + timedelta(days=1))
 
     def can_comment(self, user):
-        return not self.comments.filter(author_trip=user).exists()
+        return self.is_finished() and not self.comments.filter(author_trip=user).exists()
 
 
 class TripRequest(models.Model):
@@ -71,7 +72,7 @@ class TripRequest(models.Model):
             self.status = "approved"
             self.save()
         else:
-            raise ValueError("No free seats available!")
+            raise ValidationError("No free seats available!")
 
     def reject(self):
         self.status = "rejected"
