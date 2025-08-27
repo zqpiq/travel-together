@@ -1,9 +1,19 @@
 # 🌍 Travel Together
 
+🔗 **Live Demo**: [https://travel-together-pstg.onrender.com/](https://travel-together-pstg.onrender.com/)
+
+👤 **Test Account**  
+- **Login**: `test`  
+- **Password**: `duyYH28!`  
+
+---
+
 **Travel Together** is a web platform for organizing shared travel experiences, helping travelers find companions and share costs for their adventures.
 
 
-<img width="709" height="923" alt="Снимок экрана 2025-08-26 в 14 57 51" src="https://github.com/user-attachments/assets/adc891e2-9441-4986-b754-1c3057a12290" />
+
+<img width="704" height="883" alt="Снимок экрана 2025-08-27 в 09 46 29" src="https://github.com/user-attachments/assets/1fccaf2e-150a-462c-a226-171195a90e7f" />
+
 
 ## ✨ Features
 
