@@ -12,7 +12,9 @@
 
 
 
-<img width="704" height="883" alt="Снимок экрана 2025-08-27 в 09 46 29" src="https://github.com/user-attachments/assets/1fccaf2e-150a-462c-a226-171195a90e7f" />
+
+<img width="504" height="888" alt="Снимок экрана 2025-08-31 в 22 15 26" src="https://github.com/user-attachments/assets/68209556-de3c-473f-aa1a-afea7d74a41e" />
+
 
 
 ## ✨ Features
