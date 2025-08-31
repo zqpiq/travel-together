@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import timedelta, date
 
 from django.core.exceptions import ValidationError
 from django.utils import timezone
@@ -33,7 +33,7 @@ class Trip(models.Model):
     )
     description = models.TextField(null=True, blank=True)
     duration_trip = models.CharField(max_length=9, choices=DURATION_CHOICES)
-    number_of_seats = models.IntegerField()
+    number_of_seats = models.PositiveIntegerField()
 
     def __str__(self):
         return f"Trip to: {self.location}"
@@ -46,6 +46,11 @@ class Trip(models.Model):
 
     def can_comment(self, user):
         return self.is_finished() and not self.comments.filter(author_trip=user).exists()
+
+    def clean(self):
+        super().clean()
+        if self.date and self.date > date.today():
+            raise ValidationError({"date_birth": "Enter a valid date of birth"})
 
 
 class TripRequest(models.Model):

@@ -1,8 +1,10 @@
 from cloudinary.models import CloudinaryField
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
+from django.core.exceptions import ValidationError
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
+from datetime import date
 
 
 class User(AbstractUser):
@@ -23,3 +25,8 @@ class Profile(models.Model):
     gender = models.CharField(max_length=7, choices=GENDER_CHOICES, default="N")
     date_birth = models.DateField(blank=True, null=True)
     about_me = models.TextField(blank=True, null=True)
+
+    def clean(self):
+        super().clean()
+        if self.date_birth and self.date_birth > date.today():
+            raise ValidationError({"date_birth": "Enter a valid date of birth"})
