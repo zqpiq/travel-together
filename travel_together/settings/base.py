@@ -1,8 +1,8 @@
 import os
 from pathlib import Path
 
-import cloudinary
 from decouple import config
+import cloudinary
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 

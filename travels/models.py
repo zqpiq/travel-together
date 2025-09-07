@@ -49,8 +49,8 @@ class Trip(models.Model):
 
     def clean(self):
         super().clean()
-        if self.date and self.date > date.today():
-            raise ValidationError({"date_birth": "Enter a valid date of birth"})
+        if self.date and self.date < date.today():
+            raise ValidationError({"date": "Trip date cannot be in the past"})
 
 
 class TripRequest(models.Model):
