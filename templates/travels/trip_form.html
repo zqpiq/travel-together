@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load crispy_forms_filters %}
+
+{% block title %}
+  <title>Create Trip</title>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h2 class="card-title text-center mb-4">Create a New Trip</h2>
+          <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <div class="d-grid mt-3">
+              <button type="submit" class="btn btn-primary btn-lg">Create</button>
+            </div>
+          </form>
+          <p class="text-center mt-3">
+            After creation, you can always edit the trip details in <a href="{% url 'travels:my-trips' %}">your trips list</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

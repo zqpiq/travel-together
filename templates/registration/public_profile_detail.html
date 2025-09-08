@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow-lg rounded-3 text-center p-4">
+        {% if profile.avatar %}
+          <img src="{{ profile.avatar.url }}"
+               alt="{{ profile.user.username }}'s avatar"
+               class="rounded-circle shadow mb-3 mx-auto"
+               style="width: 150px; height: 150px; object-fit: cover;">
+        {% else %}
+          <img src="{% static 'images/default_avatar.jpg' %}"
+               alt="Default avatar"
+               class="rounded-circle shadow mb-3 mx-auto"
+               style="width: 150px; height: 150px; object-fit: cover;">
+        {% endif %}
+
+        <h4 class="card-title mb-1">{{ profile.user.username }}</h4>
+        <p class="text-muted">{{ profile.user.first_name }} {{ profile.user.last_name }}</p>
+
+        <div class="card-body">
+          <p><strong>Gender:</strong> {{ profile.gender }}</p>
+          {% if profile.about_me %}
+            <p class="fst-italic">"{{ profile.about_me }}"</p>
+          {% else %}
+            <p class="text-muted">No bio yet...</p>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="mt-4">
+        <h5 class="mb-3">Comments Received</h5>
+        {% if profile.user.received_comments.exists %}
+          {% for comment in profile.user.received_comments.all %}
+            <div class="card mb-2 shadow-sm">
+              <div class="card-body">
+                <h6 class="card-subtitle mb-1 text-muted">From: {{ comment.author_trip.username }}</h6>
+                <p class="mb-1">{{ comment.text }}</p>
+                <small class="text-muted">On trip: {{ comment.trip }}</small>
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <p class="text-muted">No comments received yet.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
