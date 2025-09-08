@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="container my-4">
+  <div class="row">
+    {% for trip in trip_list %}
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm">
+          <img class="card-img-top"
+               src="{% static 'locations/' %}{{ trip.location.location_name_img }}"
+               alt="{{ trip.location.name }}">
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title">{{ trip }}</h5>
+            <p class="card-text"><strong>Date:</strong> {{ trip.date }}</p>
+            <p class="card-text"><strong>Budget:</strong> {{ trip.budget }}</p>
+            <p class="card-text"><strong>Duration:</strong> {{ trip.duration_trip }}</p>
+            <p class="card-text">{{ trip.description }}</p>
+            <p class="card-text">
+              <strong>Seats:</strong> {{ trip.approved_count }} / {{ trip.number_of_seats }}
+              {% if trip.approved_count >= trip.number_of_seats %}
+                <span class="text-danger"> - Full ❌</span>
+              {% endif %}
+            </p>
+          </div>
+          <div class="card-footer text-muted text-center">
+            <a href="{% url 'public-profile' pk=trip.owner.profile.id %}">{{ trip.owner.username }}</a>
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <div class="container mt-5">
+        <div class="p-5 mb-4 bg-light rounded-3 shadow-sm">
+          <div class="container-fluid py-5 text-center">
+            <h2 class="fw-bold text-secondary">You have not created any trips yet 🚀</h2>
+            <p class="col-lg-8 mx-auto fs-5 text-muted">
+              Create your first adventure and start inviting participants! ✈️✨
+            </p>
+            <a class="btn btn-primary btn-lg px-4" href="{% url 'travels:create-trip' %}">
+              Create Your Trip
+            </a>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
+
