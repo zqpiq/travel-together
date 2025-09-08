@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+{% if user.is_authenticated %}
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <div class="card shadow-sm">
+        <div class="card-header text-center bg-primary text-white">
+          <h3>{{ user.first_name }} {{ user.last_name }}</h3>
+        </div>
+        <div class="card-body text-center">
+          {% if user.profile.avatar %}
+            <img src="{{ user.profile.avatar.url }}" alt="{{ user.username }}'s avatar"
+                 class="rounded-circle mb-3 shadow" width="120" height="120">
+          {% else %}
+            <img src="{% static 'images/default_avatar.jpg' %}" alt="Default avatar"
+                 class="rounded-circle mb-3 shadow" width="120" height="120">
+          {% endif %}
+
+          <div class="mb-2">
+            <strong>Username:</strong> {{ user.username }}
+          </div>
+          <div class="mb-2">
+            <strong>Telegram:</strong> {{ user.profile.telegram|default:"Not provided" }}
+          </div>
+          <div class="mb-2">
+            <strong>Phone:</strong> {{ user.profile.phone_number|default:"Not provided" }}
+          </div>
+          <div class="mb-2">
+            <strong>Gender:</strong> {{ user.profile.get_gender_display|default:"-" }}
+          </div>
+          <div class="mb-2">
+            <strong>Date of birth:</strong> {{ user.profile.date_birth|date:"F j, Y"|default:"Not set" }}
+          </div>
+          {% if user.profile.about_me %}
+            <div class="mb-3">
+              <strong>About me:</strong> {{ user.profile.about_me}}
+            </div>
+          {% endif %}
+
+          <a href="{% url 'fill-profile' %}" class="btn btn-primary">Edit Profile</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="container my-5">
+    <h3>Do you really want to join this trip?</h3>
+    <form method="post">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-success">Yes, join</button>
+      <a href="{% url 'travels:home-page' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+  </div>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-4">
+      <div class="card shadow-sm text-center">
+        <div class="card-body">
+          <h2 class="card-title mb-3">You have logged out</h2>
+          <p class="mb-4">Thank you for visiting TravelTogether!</p>
+          <a href="{% url 'login' %}" class="btn btn-primary btn-lg">Log in again</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
