@@ -6,7 +6,7 @@ import cloudinary
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "django-insecure-bx1ri2hpzgmz98&g&vh6y%d&o+jlc&=u6pwts&g()cgabd^jml")
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
 INSTALLED_APPS = [
     "django.contrib.admin",

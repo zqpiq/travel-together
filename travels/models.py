@@ -39,7 +39,7 @@ class Trip(models.Model):
         return f"Trip to: {self.location}"
 
     def approved_count(self):
-        return self.requests.filter(status="approved").count()
+        return self.requests.filter(status=TripRequest.Status.APPROVED).count()
 
     def is_finished(self):
         return self.date < (timezone.localdate() + timedelta(days=1))
@@ -54,16 +54,18 @@ class Trip(models.Model):
 
 
 class TripRequest(models.Model):
-    STATUS_CHOICES = (
-        ("approved", "Approved"),
-        ("rejected", "Rejected"),
-        ("pending", "Pending"),
-    )
+    class Status(models.TextChoices):
+        APPROVED = "approved", "Approved"
+        REJECTED = "rejected", "Rejected"
+        PENDING = "pending", "Pending"
+
     trip = models.ForeignKey(Trip, on_delete=models.CASCADE, related_name="requests")
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="trip_requests"
     )
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="pending")
+    status = models.CharField(
+        max_length=10, choices=Status.choices, default=Status.PENDING
+    )
     contacts_visible = models.BooleanField(default=False)
 
     class Meta:
@@ -71,16 +73,16 @@ class TripRequest(models.Model):
 
     def approve(self):
         if (
-            self.trip.requests.filter(status="approved").count()
+            self.trip.requests.filter(status=TripRequest.Status.APPROVED).count()
             < self.trip.number_of_seats
         ):
-            self.status = "approved"
+            self.status = TripRequest.Status.APPROVED
             self.save()
         else:
             raise ValidationError("No free seats available!")
 
     def reject(self):
-        self.status = "rejected"
+        self.status = TripRequest.Status.REJECTED
         self.save()
 
     def __str__(self):
