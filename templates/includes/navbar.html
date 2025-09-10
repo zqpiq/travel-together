@@ -11,18 +11,15 @@
       <ul class="navbar-nav mb-2 mb-lg-0">
         <li class="nav-item"><a class="nav-link" href="{% url 'travels:countries' %}">Countries</a></li>
         <li class="nav-item"><a class="nav-link" href="{% url 'travels:locations-all' %}">Cities</a></li>
-        <li class="nav-item"><a class="nav-link" href="{% url 'travels:trips-all' %}">Trips</a></li>
         {% if user.is_authenticated %}
+          <li class="nav-item"><a class="nav-link" href="{% url 'travels:trips-all' %}">Trips</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'travels:my-trips' %}">My trips</a></li>
           {% else %}
+          <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Trips</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">My trips</a></li>
         {% endif %}
         <li class="nav-item"><a class="nav-link" href="{% url 'travels:requests' %}">Requests</a></li>
       </ul>
-
-      <form class="d-flex me-2" role="search">
-        <input class="form-control" type="search" placeholder="Search trips…" aria-label="Search">
-      </form>
 
       {% if user.is_authenticated %}
         <div class="d-flex gap-2">
@@ -36,7 +33,7 @@
       {% else %}
         <div class="d-flex gap-2">
           <a class="btn btn-outline-light" href="{% url 'login' %}">Log in</a>
-          <a class="btn btn-primary" href="#">Sign up</a>
+          <a class="btn btn-primary" href="{% url 'register' %}">Sign up</a>
         </div>
       {% endif %}
     </div>

@@ -29,6 +29,23 @@
           {% endif %}
         </div>
       </div>
+
+      <div class="mt-4">
+        <h5 class="mb-3">Comments Received</h5>
+        {% if profile.user.received_comments.exists %}
+          {% for comment in profile.user.received_comments.all %}
+            <div class="card mb-2 shadow-sm">
+              <div class="card-body">
+                <h6 class="card-subtitle mb-1 text-muted">From: {{ comment.author_trip.username }}</h6>
+                <p class="mb-1">{{ comment.text }}</p>
+                <small class="text-muted">On trip: {{ comment.trip }}</small>
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <p class="text-muted">No comments received yet.</p>
+        {% endif %}
+      </div>
     </div>
   </div>
 </div>

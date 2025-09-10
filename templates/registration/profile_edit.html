@@ -14,7 +14,7 @@
           <h2 class="card-title text-center mb-4">Complete Your Profile</h2>
           <form action="" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            {{ profile_form|crispy }}
+            {{ form|crispy }}
             <div class="d-grid mt-3">
               <button type="submit" class="btn btn-primary btn-lg">Save Profile</button>
             </div>

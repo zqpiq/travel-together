@@ -1,3 +1,8 @@
+from datetime import timedelta, date
+
+from django.core.exceptions import ValidationError
+from django.utils import timezone
+
 from django.conf import settings
 from django.db import models
 
@@ -11,13 +16,15 @@ class Trip(models.Model):
         (">$5000", ">$5000"),
     )
     DURATION_CHOICES = (
-        ("1", "1"),
-        ("2-4", "2-4"),
-        ("5-7", "5-7"),
-        ("8-14", "8-15"),
-        (">14", ">14"),
+        ("1 day", "1 day"),
+        ("2-4 days", "2-4 days"),
+        ("5-7 days", "5-7 days"),
+        ("8-14 days", "8-15 days"),
+        (">14 days", ">14 days"),
     )
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="created_trips")
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="created_trips"
+    )
     location = models.ForeignKey("Location", on_delete=models.CASCADE)
     date = models.DateField()
     budget = models.CharField(
@@ -25,39 +32,57 @@ class Trip(models.Model):
         choices=BUDGET_CHOICES,
     )
     description = models.TextField(null=True, blank=True)
-    duration_trip = models.CharField(max_length=5, choices=DURATION_CHOICES)
-    number_of_seats = models.IntegerField()
-    reserved_seats = models.IntegerField(default=1)
+    duration_trip = models.CharField(max_length=9, choices=DURATION_CHOICES)
+    number_of_seats = models.PositiveIntegerField()
 
     def __str__(self):
         return f"Trip to: {self.location}"
 
+    def approved_count(self):
+        return self.requests.filter(status=TripRequest.Status.APPROVED).count()
+
+    def is_finished(self):
+        return self.date < (timezone.localdate() + timedelta(days=1))
+
+    def can_comment(self, user):
+        return self.is_finished() and not self.comments.filter(author_trip=user).exists()
+
+    def clean(self):
+        super().clean()
+        if self.date and self.date < date.today():
+            raise ValidationError({"date": "Trip date cannot be in the past"})
+
 
 class TripRequest(models.Model):
-    STATUS_CHOICES = (
-        ("approved", "Approved"),
-        ("rejected", "Rejected"),
-        ("pending", "Pending"),
+    class Status(models.TextChoices):
+        APPROVED = "approved", "Approved"
+        REJECTED = "rejected", "Rejected"
+        PENDING = "pending", "Pending"
 
-    )
     trip = models.ForeignKey(Trip, on_delete=models.CASCADE, related_name="requests")
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="trip_requests")
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="pending")
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="trip_requests"
+    )
+    status = models.CharField(
+        max_length=10, choices=Status.choices, default=Status.PENDING
+    )
     contacts_visible = models.BooleanField(default=False)
-
 
     class Meta:
         unique_together = ("trip", "user")
 
     def approve(self):
-        if self.trip.requests.filter(status="approved").count() < self.trip.number_of_seats:
-            self.status = "approved"
+        if (
+            self.trip.requests.filter(status=TripRequest.Status.APPROVED).count()
+            < self.trip.number_of_seats
+        ):
+            self.status = TripRequest.Status.APPROVED
             self.save()
         else:
-            raise ValueError("No free seats available!")
+            raise ValidationError("No free seats available!")
 
     def reject(self):
-        self.status = "rejected"
+        self.status = TripRequest.Status.REJECTED
         self.save()
 
     def __str__(self):
@@ -66,7 +91,9 @@ class TripRequest(models.Model):
 
 class Location(models.Model):
     name = models.CharField(max_length=50)
-    country = models.ForeignKey("Country", on_delete=models.CASCADE, related_name="locations")
+    country = models.ForeignKey(
+        "Country", on_delete=models.CASCADE, related_name="locations"
+    )
     location_name_img = models.CharField(max_length=50)
 
     class Meta:
@@ -90,34 +117,16 @@ class Country(models.Model):
 
 
 class Commentary(models.Model):
-    trip = models.ForeignKey(
-        Trip,
-        on_delete=models.CASCADE,
-        related_name="comments"
-    )
-    author = models.ForeignKey(
+    trip = models.ForeignKey(Trip, on_delete=models.CASCADE, related_name="comments")
+    author_trip = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name="written_comments"
+        related_name="written_comments",
     )
     recipient = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name="received_comments"
+        related_name="received_comments",
     )
     text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-
-
-class Rating(models.Model):
-    RATING_CHOICE = (
-        (1, 1),
-        (2, 2),
-        (3, 3),
-        (4, 4),
-        (5, 5)
-    )
-    recipient = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    rating = models.PositiveSmallIntegerField(
-        choices=RATING_CHOICE
-    )

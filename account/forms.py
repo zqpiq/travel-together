@@ -1,7 +1,6 @@
 from django import forms
 from django.contrib.auth import get_user_model
 from phonenumber_field.formfields import PhoneNumberField
-from phonenumber_field.widgets import PhoneNumberPrefixWidget
 
 from account.models import Profile
 
@@ -14,14 +13,8 @@ class LoginForm(forms.Form):
 
 
 class UserRegistrationForm(forms.ModelForm):
-    password = forms.CharField(
-        label="Password",
-        widget=forms.PasswordInput
-    )
-    password2 = forms.CharField(
-        label="Repeat password",
-        widget=forms.PasswordInput
-    )
+    password = forms.CharField(label="Password", widget=forms.PasswordInput)
+    password2 = forms.CharField(label="Repeat password", widget=forms.PasswordInput)
 
     class Meta:
         model = User
@@ -40,12 +33,24 @@ class UserEditForm(forms.ModelForm):
         fields = ["username", "first_name", "last_name"]
 
 
-
 class ProfileEditForm(forms.ModelForm):
     phone_number = PhoneNumberField(
-        widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "+380123456789"})
+        widget=forms.TextInput(
+            attrs={"class": "form-control", "placeholder": "+380123456789"}
+        )
+    )
+    date_birth = forms.DateField(
+        required=False,
+        widget=forms.DateInput(attrs={"type": "date", "class": "form-control"}),
     )
 
     class Meta:
         model = Profile
-        fields = ["phone_number", "telegram", "avatar", "gender", "date_birth", "about_me"]
+        fields = [
+            "phone_number",
+            "telegram",
+            "avatar",
+            "gender",
+            "date_birth",
+            "about_me",
+        ]
